@@ -1,0 +1,61 @@
+<table id="stocks"></table>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbxGQd5SCE7L6UbK5kAbb9-UsSDMXTrAmnyAGedH97guuU3363PjM65GSCEjqSO3Cu_eWg/exec";
+
+function render() {
+  fetch(API + "?t=" + Date.now()) // 防快取
+    .then(r => r.json())
+    .then(data => {
+
+      let html = `
+      <tr>
+        <th>分類</th>
+        <th>公司</th>
+        <th>代號</th>
+        <th>昨收</th>
+        <th>現價</th>
+        <th>漲跌</th>
+        <th>漲跌%</th>
+        <th>成交量</th>
+      </tr>`;
+
+      data.forEach(item => {
+
+        const change = Number(item.漲跌);
+        const percent = Number(item.漲跌百分比);
+
+        const isUp = change >= 0;
+        const arrow = isUp ? "▲" : "▼";
+        const color = isUp ? "red" : "green";
+
+        html += `
+        <tr>
+          <td>${item.分類}</td>
+          <td>${item.公司}</td>
+          <td>${item.股票代號}</td>
+          <td>${item.前一天收盤價}</td>
+          <td>${item.現價}</td>
+
+          <td style="color:${color};font-weight:bold;">
+            ${arrow} ${change}
+          </td>
+
+          <td style="color:${color};font-weight:bold;">
+            ${arrow} ${percent}%
+          </td>
+
+          <td>${item.成交量}</td>
+        </tr>`;
+      });
+
+      document.getElementById("stocks").innerHTML = html;
+    });
+}
+
+// 🔁 初次載入
+render();
+
+// 🔄 每 10 秒更新（即時行情效果）
+setInterval(render, 10000);
+</script>
