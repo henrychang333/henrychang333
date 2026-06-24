@@ -2,21 +2,21 @@ name: TWSE Dashboard Update
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # 每15分鐘
+    - cron: "*/15 * * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 24
-        
     - name: Checkout repo
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup Python
       uses: actions/setup-python@v5
