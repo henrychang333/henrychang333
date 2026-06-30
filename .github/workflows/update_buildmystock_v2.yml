@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests zoneinfo
+        pip install requests
 
     - name: Run script to build HTML
       run: python scripts/buildmystock_v2.py
